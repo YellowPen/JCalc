@@ -9,7 +9,7 @@ int OperatorList::registerOp( OperatorBase* op)
 
  OperatorBase*  OperatorList::getOp(int iden)
 {
-	for(int i = 0; i <  Operators.size(); i++)
+	for(unsigned int i = 0; i <  Operators.size(); i++)
 	{
 		if( Operators[i]->getOpIden() == iden)
 		{
@@ -21,7 +21,7 @@ int OperatorList::registerOp( OperatorBase* op)
 
 OperatorBase*  OperatorList::getOp(std::string iden)
 {
-	for(int i = 0; i <  Operators.size(); i++)
+	for(unsigned int i = 0; i <  Operators.size(); i++)
 	{
 		if( Operators[i]->getOpName() == iden)
 		{
@@ -34,7 +34,7 @@ OperatorBase*  OperatorList::getOp(std::string iden)
 
 bool OperatorList::exists(std::string iden)
 {
-	for(int i = 0; i <  Operators.size(); i++)
+	for(unsigned int i = 0; i <  Operators.size(); i++)
 	{
 		if( Operators[i]->getOpName() == iden)
 		{

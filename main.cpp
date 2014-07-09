@@ -21,16 +21,6 @@ void toAllLowerCase(string input)
 
 int main()
 {
-	
-
-	string input;
-	cout<<">>";
-	//getline(cin, input);
-	input = "3+4";
-	toAllLowerCase(input);
-
-
-
 	SystemState sys_state;
 
 	FunctionList funcs;
@@ -43,16 +33,29 @@ int main()
 	minusO sub;
 	mulO mul;
 	divO div;
+	sqrtF sqart;
 
 	sys_state.Operators->registerOp(&add);
 	sys_state.Operators->registerOp(&sub);
 	sys_state.Operators->registerOp(&mul);
 	sys_state.Operators->registerOp(&div);
+	sys_state.Functions->registerFunc(&sqart);
 
 	ExpressionEvaluator eval;
+	
+	
+	while(true)
+	{
+		string input;
+		cout<<"\n >>";
+		getline(cin, input);
+		toAllLowerCase(input);
 
-	Expression inputex("3*8+9-4+564+65", &sys_state);
-	eval.setExpression(&inputex);
-	cout<<eval.evaluateToStr();
-	getchar();
+		Expression inputex(input, &sys_state);
+		eval.setExpression(&inputex);
+
+		cout<<eval.evaluateToStr();
+	}
+
+	return 0;
 }

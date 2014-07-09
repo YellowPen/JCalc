@@ -17,6 +17,7 @@ public:
 	//Given the Function identity returns that Function
 	//object
 	FunctionBase* getFunc(int iden);
+	FunctionBase* getFunc(std::string funcname);
 
 	//Checks if the function name is registered
 	bool exists(std::string funcname);

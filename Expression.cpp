@@ -7,7 +7,7 @@ Expression::Expression(string input, SystemState *state)
 {
 	vector<string> input_parts = inputSplit(input);
 
-	for(int i = 0; i < input_parts.size(); i++)
+	for(unsigned int i = 0; i < input_parts.size(); i++)
 	{
 		//Check if the name is a regisered operator
 		if(state->Operators->exists(input_parts[i]))
@@ -16,6 +16,22 @@ Expression::Expression(string input, SystemState *state)
 			ExpressionType tempType(state->Operators->getOp(input_parts[i]));
 			ExpressionVec.push_back(tempType);
 		}
+
+		//Check if the name is a registered function 
+		else if(state->Functions->exists(input_parts[i]))
+		{
+			ExpressionType tempType(state->Functions->getFunc(input_parts[i]));
+			ExpressionVec.push_back(tempType);
+		}
+
+		else if(input_parts[i] == "(" || input_parts[i] == ")" || input_parts[i] == ",")
+		{
+			//Gets the c_str of input_parts at i and passes the first char
+			//(there shoudl only be one) too ExpressionType
+			ExpressionType tempType(input_parts[i].c_str()[0]);
+			ExpressionVec.push_back(tempType);
+		}
+
 		//Assumes it to be a double 
 		//Note: A safer solution should be implemented
 		else
@@ -36,7 +52,7 @@ vector<string> Expression::inputSplit(string input)
 
 	char currentchar = '\0';
 
-	for(int i = 0;  i <= input.size(); i ++)
+	for(unsigned int i = 0;  i <= input.size(); i ++)
 	{
 
 		currentchar = input[i];
@@ -67,12 +83,44 @@ vector<string> Expression::inputSplit(string input)
 				writebuffer += currentchar;
 			}
 
-			if(readingbuffer == false)
+			else if(readingbuffer == false)
 			{
 				writebuffer +=currentchar;
 				readingbuffer = true;
 			}
 		}
+
+		//Check if digit is a character, in the case that it is a char it
+		//will be pushed until a paranthesis is encountered
+		else if(isalpha(currentchar))
+		{
+			//We advance i and check for a '(' each loop, while pushing the
+			//next char until parenthesis is found
+			while(input[i] != '(')
+			{
+				writebuffer += input[i];
+				i++;
+				//Add: throw error if i gets higher then input.size();
+			}
+			//Push the function
+			bufferlist.push_back(writebuffer);
+			writebuffer.clear();
+			//Generate a temporary string with a paranthesis and pushes that
+			//since the parenthesis is lost in the above loop
+			if(input[i] == '(')
+			{
+				std::string tempStr("(");
+				bufferlist.push_back(tempStr);
+			}
+		}
+
+		//Check if current char is a left parenthesis
+		else if(currentchar == '(')
+		{
+			bufferlist.push_back("(");
+			writebuffer.clear();
+		}
+
 		//Assumes the char is an operator, if the algorthim cant 
 		//correctly identify the charecter as a digit, decimal
 		//point, alphabetical value, or parenthesis it will assume 

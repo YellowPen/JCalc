@@ -2,9 +2,11 @@
 
 #include <vector>
 #include <string>
+#include <algorithm>
 
 #include "Expression.h"
 #include "ExpressionType.h"
+
 
 class ExpressionType;
 class Expression;

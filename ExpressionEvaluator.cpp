@@ -15,6 +15,7 @@ void ExpressionEvaluator::setExpression(Expression* in)
 	ExpressionEvaluator::curExpression = in;
 }
 
+//See: http://en.wikipedia.org/wiki/Shunting-yard_algorithm
 Expression ExpressionEvaluator::shuntingParse(Expression *input)
 {
 	std::vector<ExpressionType> stack;
@@ -33,12 +34,22 @@ Expression ExpressionEvaluator::shuntingParse(Expression *input)
 
 		else if(currentExComponent.Type == FUNCTION)
 		{
-			//Do Stuff
+			stack.push_back(currentExComponent);
 		}
 
 		else if(currentExComponent.Type == COMMA)
 		{
-			//Do stuff
+			while(stack.back().Type != PARANTHESISO)
+			{
+				outputqueue.push_back(stack.back());
+				stack.pop_back();
+
+				if(stack.empty())
+				{
+					//Error
+					break;
+				}
+			}
 		}
 
 		else if(currentExComponent.Type == OPERATOR)
@@ -55,11 +66,44 @@ Expression ExpressionEvaluator::shuntingParse(Expression *input)
 							outputqueue.push_back(stack.back());
 							stack.pop_back();
 						}
-						}
+					}
 			}
 			
 
 			stack.push_back(currentExComponent);
+		}
+
+		else if(currentExComponent.Type == PARANTHESISO)
+		{
+			stack.push_back(currentExComponent);
+		}
+
+		else if(currentExComponent.Type == PARANTHESISC)
+		{
+			//Pop values off stack and into output until
+			//we encounter a open parenthesis
+			while(stack.back().Type != PARANTHESISO)
+			{
+				outputqueue.push_back(stack.back());
+				stack.pop_back();
+
+				if(stack.empty())
+				{
+					//Error
+					break;
+				}
+			}
+			//When we encounter a open Paranthesis:
+			//Pop it off the stack
+			stack.pop_back();
+
+			//If after this the token at the top of the 
+			//stack is a function pop it onto output
+			if(!stack.empty() && stack.back().Type == FUNCTION)
+			{
+				outputqueue.push_back(stack.back());
+				stack.pop_back();
+			}
 		}
 
 		//When there are no more tokens to read
@@ -113,6 +157,34 @@ Expression ExpressionEvaluator::evaluateToEx()
 					ExpressionType ans = currentExComponent.getOperator()->evaluate(arg1, arg2);
 
 					//Push answer to stack
+					stack.push_back(ans);
+				}
+			}
+
+			if(currentExComponent.Type == FUNCTION)
+			{
+				int func_args = currentExComponent.getFunction()->getFuncArgNum();
+
+				if(stack.size() < func_args)
+				{
+					//Error
+				}
+
+				else if(stack.size() >= func_args)
+				{
+					std::vector<ExpressionType> args;
+
+					//loop through stack, pop the top n values into args
+					for(int i = 0; i < func_args; i++)
+					{
+						args.push_back(stack[stack.size()-1]);
+						stack.pop_back();
+					}
+
+					//Evaluate
+
+					ExpressionType ans = currentExComponent.getFunction()->evaluate(args);
+
 					stack.push_back(ans);
 				}
 			}

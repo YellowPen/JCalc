@@ -1,8 +1,13 @@
+#include <cmath>
+
+
 #include "Expression.h"
 #include "OperatorBase.h"
+#include "FunctionBase.h"
 
 class Expression;
 class OperatorBase;
+class FunctionBase;
 
 class plusO : public OperatorBase
 {
@@ -57,7 +62,7 @@ class minusO : public OperatorBase
 
 	ExpressionType evaluate(ExpressionType a, ExpressionType b)
 	{
-		double ans = (a.getNumeric()) - (a.getNumeric());
+		double ans = (a.getNumeric()) - (b.getNumeric());
 		ExpressionType tempex(ans);
 		return tempex;
 	}
@@ -167,6 +172,51 @@ class divO : public OperatorBase
 	}
 
 	void setOpIden(int idenin)
+	{
+		iden = idenin;
+	}
+};
+
+class sqrtF : public FunctionBase
+{
+
+	ExpressionType evaluate(Expression input)
+	{
+		if(input.length() == 1)
+		{
+			double ans = sqrt(input.at(0).getNumeric());
+			ExpressionType tempex(ans);
+			return tempex;
+		}
+	}
+
+	ExpressionType evaluate(std::vector<ExpressionType> input) 
+	{
+		//Make sure there are the correct args arguments
+		if(input.size() == 1)
+		{
+			double ans = sqrt(input[0].getNumeric());
+			ExpressionType tempex(ans);
+			return tempex;
+		}
+	}
+
+	int getFuncIden() 
+	{
+		return iden;
+	}
+
+	std::string getFuncName() 
+	{
+		return "sqrt";
+	}
+
+	int getFuncArgNum() 
+	{
+		return 1;
+	}
+
+	void setFuncIden(int idenin)
 	{
 		iden = idenin;
 	}

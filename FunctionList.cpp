@@ -11,9 +11,23 @@ int FunctionList::registerFunc(FunctionBase* func)
 FunctionBase* FunctionList::getFunc(int iden)
 {
 	//Search for Function 
-	for(int i = 0; i<Functions.size(); i++)
+	for(unsigned int i = 0; i<Functions.size(); i++)
 	{
 		if(Functions[i]->getFuncIden() == iden)
+		{
+			return Functions[i];
+		}
+	}
+	//Returns nullptr if cant be found
+	return nullptr;
+}
+
+FunctionBase* FunctionList::getFunc(std::string funcname)
+{
+	//Search for Function 
+	for(unsigned int i = 0; i<Functions.size(); i++)
+	{
+		if(Functions[i]->getFuncName() == funcname)
 		{
 			return Functions[i];
 		}
@@ -25,7 +39,7 @@ FunctionBase* FunctionList::getFunc(int iden)
 bool FunctionList::exists(std::string funcname)
 {
 	//Search for Function 
-	for(int i = 0; i<Functions.size(); i++)
+	for(unsigned int i = 0; i<Functions.size(); i++)
 	{
 		if(Functions[i]->getFuncName() == funcname)
 		{
