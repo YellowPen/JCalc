@@ -104,8 +104,8 @@ Expression ExpressionEvaluator::evaluateToEx()
 				else if(stack.size() >= 2)
 				{
 					//Pop the last two arguments in the stack
-					ExpressionType arg1 = stack[stack.size() - 1];
-					ExpressionType arg2 = stack[stack.size() - 2];
+					ExpressionType arg1 = stack[stack.size() - 2];
+					ExpressionType arg2 = stack[stack.size() - 1];
 					stack.pop_back();
 					stack.pop_back();
 
