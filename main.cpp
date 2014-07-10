@@ -34,12 +34,14 @@ int main()
 	mulO mul;
 	divO div;
 	sqrtF sqart;
+	variadictest vtest;
 
 	sys_state.Operators->registerOp(&add);
 	sys_state.Operators->registerOp(&sub);
 	sys_state.Operators->registerOp(&mul);
 	sys_state.Operators->registerOp(&div);
 	sys_state.Functions->registerFunc(&sqart);
+	sys_state.Functions->registerFunc(&vtest);
 
 	ExpressionEvaluator eval;
 	

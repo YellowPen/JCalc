@@ -23,7 +23,8 @@ public:
 	virtual std::string getFuncName() = 0;
 	//Returns the number of arguments its takes
 	virtual int getFuncArgNum() = 0;
-
+	//Returns weather or not the function is variadic
+	virtual bool isVariadic() = 0;
 
 	virtual void setFuncIden(int idenin) = 0;
 

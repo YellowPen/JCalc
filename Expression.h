@@ -1,14 +1,12 @@
 #pragma once
 //STL
 #include <vector>
+#include <string>
+#include <stdlib.h>
+#include <ctype.h>
 //Boost
 
 //JCPU
-
-#include <string>
-
-#include <stdlib.h>
-#include <ctype.h>
 
 #include "ExpressionType.h"
 #include "SystemState.h"
@@ -46,9 +44,9 @@ public:
 	//Returns the size of the ExpressionVec
 	int length();
 
+
 private:
 	std::vector<std::string> inputSplit(std::string);
 	std::vector<ExpressionType> ExpressionVec;
-
 };
 

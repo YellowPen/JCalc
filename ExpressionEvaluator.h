@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <deque>
 #include <string>
 #include <algorithm>
 
@@ -29,5 +30,7 @@ public:
 private:
 	Expression* curExpression;
 	Expression shuntingParse(Expression *in);
+	//Uses deque becasue poppingfrom front is neccesary
+	std::deque<int> arritystack;
 };
 

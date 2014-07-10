@@ -20,6 +20,7 @@ Expression ExpressionEvaluator::shuntingParse(Expression *input)
 {
 	std::vector<ExpressionType> stack;
 	std::vector<ExpressionType> outputqueue;
+	std::deque<int> arrity;
 
 	for(int i = 0; i < input->length(); i++)
 	{
@@ -35,10 +36,15 @@ Expression ExpressionEvaluator::shuntingParse(Expression *input)
 		else if(currentExComponent.Type == FUNCTION)
 		{
 			stack.push_back(currentExComponent);
+			if(currentExComponent.getFunction()->isVariadic())
+			{
+				arrity.push_back(1);
+			}
 		}
 
 		else if(currentExComponent.Type == COMMA)
 		{
+			arrity.back()++;
 			while(stack.back().Type != PARANTHESISO)
 			{
 				outputqueue.push_back(stack.back());
@@ -116,7 +122,7 @@ Expression ExpressionEvaluator::shuntingParse(Expression *input)
 			}
 		}
 	}
-
+	arritystack = arrity;
 	Expression tempex(outputqueue);
 	return tempex;
 }
@@ -164,7 +170,18 @@ Expression ExpressionEvaluator::evaluateToEx()
 
 			if(currentExComponent.Type == FUNCTION)
 			{
-				int func_args = currentExComponent.getFunction()->getFuncArgNum();
+				int func_args = 0;
+
+				if(currentExComponent.getFunction()->isVariadic() == true)
+				{
+					func_args = arritystack.front();
+					arritystack.pop_front();
+				}
+
+				if(currentExComponent.getFunction()->isVariadic() == false)
+				{
+					func_args = currentExComponent.getFunction()->getFuncArgNum();
+				}
 
 				if(stack.size() < func_args)
 				{
