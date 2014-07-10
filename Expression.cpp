@@ -27,7 +27,7 @@ Expression::Expression(string input, SystemState *state)
 		else if(input_parts[i] == "(" || input_parts[i] == ")" || input_parts[i] == ",")
 		{
 			//Gets the c_str of input_parts at i and passes the first char
-			//(there shoudl only be one) too ExpressionType
+			//(there shoudl only be one) to ExpressionType
 			ExpressionType tempType(input_parts[i].c_str()[0]);
 			ExpressionVec.push_back(tempType);
 		}
@@ -49,6 +49,9 @@ vector<string> Expression::inputSplit(string input)
 	string writebuffer;
 	vector<string> bufferlist;
 	bool readingbuffer = false;
+	//Allow for unary operations
+	bool unarypossible = true;
+	bool unaryset = false;
 
 	char currentchar = '\0';
 
@@ -75,6 +78,11 @@ vector<string> Expression::inputSplit(string input)
 			}
 		}
 
+		else if(currentchar == '-' && unarypossible == true && isdigit(input[i+1]))
+		{
+			unaryset = true;
+		}
+
 		//Check if current char is a digit or decimal
 		else if(isdigit(currentchar) || currentchar == '.')
 		{
@@ -85,9 +93,21 @@ vector<string> Expression::inputSplit(string input)
 
 			else if(readingbuffer == false)
 			{
-				writebuffer +=currentchar;
-				readingbuffer = true;
+				if(unaryset == true)
+				{
+					writebuffer += '-';
+					writebuffer +=currentchar;
+					readingbuffer = true;
+					unaryset = false;
+				}
+				else
+				{
+					writebuffer +=currentchar;
+					readingbuffer = true;
+				}
 			}
+
+			unarypossible = false;
 		}
 
 		//Check if digit is a character, in the case that it is a char it
@@ -112,6 +132,7 @@ vector<string> Expression::inputSplit(string input)
 				std::string tempStr("(");
 				bufferlist.push_back(tempStr);
 			}
+			unarypossible = true;
 		}
 
 		//Check if current char is a left parenthesis
@@ -119,6 +140,7 @@ vector<string> Expression::inputSplit(string input)
 		{
 			bufferlist.push_back("(");
 			writebuffer.clear();
+			unarypossible = true;
 		}
 
 		//Assumes the char is an operator, if the algorthim cant 
@@ -126,6 +148,12 @@ vector<string> Expression::inputSplit(string input)
 		//point, alphabetical value, or parenthesis it will assume 
 		//it is an operator.
 		else {
+			unarypossible = true;
+			if(currentchar == ')')
+			{
+				unarypossible = false;
+			}
+
 			if(!writebuffer.empty())
 			{
 				if(readingbuffer == true)
@@ -137,6 +165,7 @@ vector<string> Expression::inputSplit(string input)
 					string tempcharstr(1, currentchar);
 					//Pushes it onto bufferlist
 					bufferlist.push_back(tempcharstr);
+					readingbuffer = false;
 				}
 			}
 

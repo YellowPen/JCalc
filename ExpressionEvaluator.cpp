@@ -46,7 +46,7 @@ Expression ExpressionEvaluator::shuntingParse(Expression *input)
 
 				if(stack.empty())
 				{
-					//Error
+					JcpuError("Error1: Mismatched Parenthesis?");
 					break;
 				}
 			}
@@ -89,7 +89,7 @@ Expression ExpressionEvaluator::shuntingParse(Expression *input)
 
 				if(stack.empty())
 				{
-					//Error
+					JcpuError("Error2: Mismatched Parenthesis?");
 					break;
 				}
 			}
@@ -142,7 +142,8 @@ Expression ExpressionEvaluator::evaluateToEx()
 			{
 				if(stack.size() < 2)
 				{
-					//Error
+					JcpuError("Error3: Insufficient arguments for operator " + currentExComponent.getOperator()->getOpName());
+					break;
 				}
 
 				else if(stack.size() >= 2)
@@ -167,7 +168,8 @@ Expression ExpressionEvaluator::evaluateToEx()
 
 				if(stack.size() < func_args)
 				{
-					//Error
+					JcpuError("Error4: Insufficient arguments for function " + currentExComponent.getFunction()->getFuncName());
+					break;
 				}
 
 				else if(stack.size() >= func_args)
@@ -199,7 +201,7 @@ Expression ExpressionEvaluator::evaluateToEx()
 
 	else
 	{
-		//Error
+		JcpuError("Error5: Unknown cause");
 	}
 }
 

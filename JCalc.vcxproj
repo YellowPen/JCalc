@@ -90,6 +90,7 @@
     <ClCompile Include="OperatorList.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Error.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="ExpressionEvaluator.h" />
     <ClInclude Include="ExpressionType.h" />

@@ -6,6 +6,7 @@
 
 #include "Expression.h"
 #include "ExpressionType.h"
+#include "Error.h"
 
 
 class ExpressionType;
