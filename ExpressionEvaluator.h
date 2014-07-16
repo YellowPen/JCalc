@@ -16,6 +16,7 @@ class Expression;
 enum ExType;
 
 
+
 class ExpressionEvaluator
 {
 public:
@@ -30,7 +31,11 @@ public:
 private:
 	Expression* curExpression;
 	Expression shuntingParse(Expression *in);
-	//Uses deque becasue poppingfrom front is neccesary
+	//Uses deque because popping from front is neccesary
 	std::deque<int> arritystack;
+	bool checkParenthesis(Expression *input);
+
+	//This is the expression thats passed if we encounter an error
+	Expression getErrorExpression();
 };
 

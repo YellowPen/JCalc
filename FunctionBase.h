@@ -5,8 +5,11 @@
 #include "Expression.h"
 #include "ExpressionType.h"
 
+
+
 class Expression;
 class ExpressionType;
+
 
 //Any Function defining class must inherit from FunctionBase
 class FunctionBase
@@ -25,6 +28,7 @@ public:
 	virtual int getFuncArgNum() = 0;
 	//Returns weather or not the function is variadic
 	virtual bool isVariadic() = 0;
+	
 
 	virtual void setFuncIden(int idenin) = 0;
 

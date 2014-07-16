@@ -8,7 +8,9 @@
 #include "ExpressionEvaluator.h"
 #include "OperatorBase.h"
 #include "SystemState.h"
-#include "testDefines.h"
+#include "Operators.h"
+#include "Functions.h"
+#include "SettingsInstance.h"
 
 using namespace std;
 
@@ -18,6 +20,27 @@ void toAllLowerCase(string input)
 	boost::algorithm::to_lower(input);
 }
 
+void regFuncsOps(SystemState* sys)
+{
+	
+	plusO add;
+	minusO sub;
+	mulO mul;
+	divO div;
+	ExponO ex;
+	sqrtF sqr;
+	sinF sine(sys->Settings);
+
+	//Load internal functions
+	sys->Operators->registerOp(&add);
+	sys->Operators->registerOp(&sub);
+	sys->Operators->registerOp(&mul);
+	sys->Operators->registerOp(&div);
+	sys->Operators->registerOp(&ex);
+	sys->Functions->registerFunc(&sqr);
+	sys->Functions->registerFunc(&sine);
+}
+
 
 int main()
 {
@@ -25,25 +48,14 @@ int main()
 
 	FunctionList funcs;
 	OperatorList ops;
+	SettingsInstance settings;
 
 	sys_state.Functions = &funcs;
 	sys_state.Operators = &ops;
-
-	plusO add;
-	minusO sub;
-	mulO mul;
-	divO div;
-	sqrtF sqart;
-	variadictest vtest;
-
-	sys_state.Operators->registerOp(&add);
-	sys_state.Operators->registerOp(&sub);
-	sys_state.Operators->registerOp(&mul);
-	sys_state.Operators->registerOp(&div);
-	sys_state.Functions->registerFunc(&sqart);
-	sys_state.Functions->registerFunc(&vtest);
+	sys_state.Settings = &settings;
 
 	ExpressionEvaluator eval;
+
 	
 	
 	while(true)

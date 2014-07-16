@@ -3,6 +3,7 @@
 #include "FunctionBase.h"
 #include "OperatorBase.h"
 
+
 class FunctionBase;
 class OperatorBase;
 
@@ -27,12 +28,12 @@ public:
 
 	ExpressionType(std::string strin)
 	{
-		Type = STRING;
-		str = strin;
-		numeric = 0;
-		Function = nullptr;
-		Operator = nullptr;
-		charv = '\0';
+			Type = STRING;
+			str = strin;
+			numeric = 0;
+			Function = nullptr;
+			Operator = nullptr;
+			charv = '\0';
 	}
 
 	ExpressionType(char charin)
@@ -88,6 +89,7 @@ public:
 		charv = '\0';
 	}
 
+
 	//Consider implementing version that rather then setting all values null
 	//at construction simply reads the type when asked for the value and 
 	//decides if it can convert from there.
@@ -123,4 +125,5 @@ private:
 	char charv;
 	FunctionBase *Function;
 	OperatorBase *Operator;
+
 };

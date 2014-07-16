@@ -36,6 +36,9 @@
     <ClCompile Include="ExpressionEvaluator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SettingsInstance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExpressionType.h">
@@ -62,13 +65,19 @@
     <ClInclude Include="OperatorList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="testDefines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ExpressionEvaluator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Error.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Operators.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

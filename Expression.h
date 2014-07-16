@@ -10,6 +10,7 @@
 
 #include "ExpressionType.h"
 #include "SystemState.h"
+#include "Error.h"
 
 
 class SystemState;

@@ -24,10 +24,11 @@ Expression::Expression(string input, SystemState *state)
 			ExpressionVec.push_back(tempType);
 		}
 
+		
 		else if(input_parts[i] == "(" || input_parts[i] == ")" || input_parts[i] == ",")
 		{
 			//Gets the c_str of input_parts at i and passes the first char
-			//(there shoudl only be one) to ExpressionType
+			//(there should only be one) to ExpressionType
 			ExpressionType tempType(input_parts[i].c_str()[0]);
 			ExpressionVec.push_back(tempType);
 		}
@@ -110,6 +111,21 @@ vector<string> Expression::inputSplit(string input)
 			unarypossible = false;
 		}
 
+		//Check is current char is a '[' char, the opening charecter of a matrix
+		else if(currentchar == '[')
+		{
+			//Reads through input until it finds closing operator
+			while(currentchar != ']'  && i != input.size())
+			{
+				currentchar = input[i];
+				writebuffer += currentchar;
+				i++;
+			}
+			bufferlist.push_back(writebuffer);
+			writebuffer.clear();
+			readingbuffer = false;
+		}
+
 		//Check if digit is a character, in the case that it is a char it
 		//will be pushed until a paranthesis is encountered
 		else if(isalpha(currentchar))
@@ -120,7 +136,12 @@ vector<string> Expression::inputSplit(string input)
 			{
 				writebuffer += input[i];
 				i++;
-				//Add: throw error if i gets higher then input.size();
+
+				if(i >= input.size())
+				{
+					JcpuError("Error6: Expected function?");
+					break;
+				}
 			}
 			//Push the function
 			bufferlist.push_back(writebuffer);

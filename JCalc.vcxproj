@@ -88,6 +88,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OperatorBase.cpp" />
     <ClCompile Include="OperatorList.cpp" />
+    <ClCompile Include="SettingsInstance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Error.h" />
@@ -96,11 +97,13 @@
     <ClInclude Include="ExpressionType.h" />
     <ClInclude Include="FunctionBase.h" />
     <ClInclude Include="FunctionList.h" />
+    <ClInclude Include="Functions.h" />
     <ClInclude Include="OperatorBase.h" />
     <ClInclude Include="OperatorList.h" />
+    <ClInclude Include="Operators.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SettingsInstance.h" />
     <ClInclude Include="SystemState.h" />
-    <ClInclude Include="testDefines.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="JCalc.rc" />

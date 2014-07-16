@@ -15,9 +15,50 @@ void ExpressionEvaluator::setExpression(Expression* in)
 	ExpressionEvaluator::curExpression = in;
 }
 
+//Makes sure there are no mismatched parenthesis
+bool ExpressionEvaluator::checkParenthesis(Expression *input)
+{
+	int parenthesisOCount = 0;
+	int parenthesisCCount = 0;
+	for(int i = 0; i < input->length(); i++)
+	{
+		if(input->at(i).Type == PARANTHESISO)
+		{
+			parenthesisOCount++;
+		}
+		if(input->at(i).Type == PARANTHESISC)
+		{
+			parenthesisCCount++;
+		}
+	}
+
+	if(parenthesisOCount == parenthesisCCount)
+	{
+		return true;
+	}
+
+	else
+	{
+		return false;
+	}
+}
+
+Expression ExpressionEvaluator::getErrorExpression()
+{
+	//Generates an empty Expression containing the string "error"
+
+	std::vector<ExpressionType> temp;
+	ExpressionType error("Error");
+	temp.push_back(error);
+	Expression tempEx(temp);
+	return tempEx;
+}
+
 //See: http://en.wikipedia.org/wiki/Shunting-yard_algorithm
 Expression ExpressionEvaluator::shuntingParse(Expression *input)
 {
+
+
 	std::vector<ExpressionType> stack;
 	std::vector<ExpressionType> outputqueue;
 	std::deque<int> arrity;
@@ -53,6 +94,7 @@ Expression ExpressionEvaluator::shuntingParse(Expression *input)
 				if(stack.empty())
 				{
 					JcpuError("Error1: Mismatched Parenthesis?");
+					return getErrorExpression();
 					break;
 				}
 			}
@@ -61,22 +103,20 @@ Expression ExpressionEvaluator::shuntingParse(Expression *input)
 		else if(currentExComponent.Type == OPERATOR)
 		{
 	
-				while(stack.empty() == false && stack.back().Type == OPERATOR)
+			if(stack.empty() == false && stack.back().Type == OPERATOR)
+			{
+				//Check if the current operator is left associative and if current operator is greater then or equal too the operator in the back of the stack
+				//or if the current operator is equal to the operator in the back of the stack
+				if( (currentExComponent.getOperator()->isLeftAssociative() &&
+					 currentExComponent.getOperator()->getOpPres() <= stack.back().getOperator()->getOpPres()) || 
+					 currentExComponent.getOperator()->getOpPres() <  stack.back().getOperator()->getOpPres())
 				{
-					//Check if the current operator is left associative
-					if(currentExComponent.getOperator()->isLeftAssociative())
-					{
-						//if current operator is greater then or equal too the operator in the back of the stack
-						if((currentExComponent.getOperator()->getOpPres()) <= (stack.back().getOperator()->getOpPres()))
-						{
-							outputqueue.push_back(stack.back());
-							stack.pop_back();
-						}
-					}
+					outputqueue.push_back(stack.back());
+					stack.pop_back();
+				}
 			}
-			
-
 			stack.push_back(currentExComponent);
+			
 		}
 
 		else if(currentExComponent.Type == PARANTHESISO)
@@ -96,6 +136,7 @@ Expression ExpressionEvaluator::shuntingParse(Expression *input)
 				if(stack.empty())
 				{
 					JcpuError("Error2: Mismatched Parenthesis?");
+					return getErrorExpression();
 					break;
 				}
 			}
@@ -129,6 +170,13 @@ Expression ExpressionEvaluator::shuntingParse(Expression *input)
 
 Expression ExpressionEvaluator::evaluateToEx()
 {
+	//Check for parenthesis
+	if(checkParenthesis(curExpression) == false)
+	{
+		JcpuError("Error7:Mismatched Parenthesis");
+		return getErrorExpression();
+	}
+
 	Expression parsedEx = shuntingParse(curExpression);
 
 	std::vector<ExpressionType> stack;
@@ -149,6 +197,7 @@ Expression ExpressionEvaluator::evaluateToEx()
 				if(stack.size() < 2)
 				{
 					JcpuError("Error3: Insufficient arguments for operator " + currentExComponent.getOperator()->getOpName());
+					return getErrorExpression();
 					break;
 				}
 
@@ -186,6 +235,7 @@ Expression ExpressionEvaluator::evaluateToEx()
 				if(stack.size() < func_args)
 				{
 					JcpuError("Error4: Insufficient arguments for function " + currentExComponent.getFunction()->getFuncName());
+					return getErrorExpression();
 					break;
 				}
 
@@ -219,6 +269,7 @@ Expression ExpressionEvaluator::evaluateToEx()
 	else
 	{
 		JcpuError("Error5: Unknown cause");
+		return getErrorExpression();
 	}
 }
 
