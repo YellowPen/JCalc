@@ -3,6 +3,11 @@
 #include <vector>
 
 #include "FunctionBase.h"
+#include "Screen.h"
+#include "SettingsInstance.h"
+
+class Screen;
+class SettingsInstance;
 
 //Stores pointers to all Functions and has functions for accessing them
 class FunctionList
@@ -23,12 +28,14 @@ public:
 	bool exists(std::string funcname);
 
 
-	FunctionList(void);
+	FunctionList(Screen*, SettingsInstance*);
 	~FunctionList(void);
 
 
 private:
 	std::vector<FunctionBase*> Functions;
+	Screen* screen;
+	SettingsInstance* setting;
 	int funcidenbuffer;
 };
 

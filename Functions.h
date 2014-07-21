@@ -1,3 +1,4 @@
+#include <string>
 #include <cmath>
 
 
@@ -10,6 +11,123 @@ class Expression;
 class OperatorBase;
 class FunctionBase;
 class SettingsInstance;
+
+
+class modeF : public FunctionBase
+{
+public:
+	ExpressionType evaluate(Expression input)
+	{
+		if(input.length() == 0)
+		{
+			if(screen != nullptr && settings != nullptr)
+			{
+				screen->addpath("Mode");
+				screen->printCurPath();
+				for(int i = 1; i < settings->settinglist.size(); i++)
+				{
+					screen->print(std::to_string(i) + settings->settinglist[i - 1].settingName);
+				}
+
+				bool found = false;
+
+				while(found == false)
+				{
+					screen->print("Please select a setting number:");
+					int input;
+					std::cin>>input;
+					if(input - 1 >= settings->settinglist.size())
+					{
+						screen->print("Invalid entry, please select again");
+						found = false;
+					}
+					else
+					{
+						settings->set(settings->settinglist[input].settingName);
+					}
+				}
+
+			}
+		}
+
+		ExpressionType temp("");
+		return temp;
+	}
+
+	ExpressionType evaluate(std::vector<ExpressionType> input) 
+	{
+		if(input.size() == 0)
+		{
+			if(screen != nullptr && settings != nullptr)
+			{
+				screen->addpath("Mode");
+				screen->printCurPath();
+				for(int i = 0; i < settings->settinglist.size(); i++)
+				{
+					screen->print("\n" + std::to_string(i + 1) + ":" + settings->settinglist[i].settingName + "\n");
+				}
+
+				bool found = false;
+
+				while(found == false)
+				{
+					screen->print("Please select a setting number: ");
+					int input;
+					std::cin>>input;
+					if(input - 1 >= settings->settinglist.size())
+					{
+						screen->print("Invalid entry, please select again \n");
+						found = false;
+					}
+					else
+					{
+						settings->set(settings->settinglist[input - 1].settingName);
+						found = true;
+					}
+				}
+
+			}
+		}
+
+		ExpressionType temp("");
+		return temp;
+	}
+
+	int getFuncIden() 
+	{
+		return iden;
+	}
+
+	std::string getFuncName() 
+	{
+		return "mode";
+	}
+
+	int getFuncArgNum() 
+	{
+		return 0;
+	}
+
+	void setFuncIden(int idenin)
+	{
+		iden = idenin;
+	}
+
+	bool isVariadic()
+	{
+		return false;
+	}
+
+	bool requiresScreen()
+	{
+		return true;
+	}
+
+	bool requiresSettingsInstance()
+	{
+		return true;
+	}
+};
 
 class sqrtF : public FunctionBase
 {
@@ -59,20 +177,21 @@ class sqrtF : public FunctionBase
 	{
 		return false;
 	}
+
+	bool requiresScreen()
+	{
+		return false;
+	}
+
+	bool requiresSettingsInstance()
+	{
+		return false;
+	}
 };
 
 class sinF : public FunctionBase
 {
 public:
-	sinF(SettingsInstance* settingsin)
-	{
-		settings = settingsin;
-	}
-
-	sinF(void)
-	{
-		SettingsInstance tempsettings;
-	}
 
 	ExpressionType evaluate(Expression input)
 	{
@@ -82,7 +201,7 @@ public:
 			Setting* val = settings->find("Trignometric Unit");
 			if(val != nullptr)
 			{
-				if(val->value == "Degrees")
+				if(val->settingValue == "Degrees")
 				{
 					//Convert to degrees and solve
 					double ans = sin(input.at(0).getNumeric()*3.14/180);
@@ -90,7 +209,7 @@ public:
 					return tempex;
 				}
 
-				if(val->value == "Radians")
+				if(val->settingValue == "Radians")
 				{
 					//solve
 					double ans = sin(input.at(0).getNumeric());
@@ -109,7 +228,7 @@ public:
 			Setting* val = settings->find("Trignometric Unit");
 			if(val != nullptr)
 			{
-				if(val->value == "Degree")
+				if(val->settingValue == "Degree")
 				{
 					//Convert to degrees and solve
 					double ans = sin(input.at(0).getNumeric()*3.14/180);
@@ -117,7 +236,7 @@ public:
 					return tempex;
 				}
 
-				if(val->value == "Radian")
+				if(val->settingValue == "Radian")
 				{
 					//solve
 					double ans = sin(input.at(0).getNumeric());
@@ -152,6 +271,14 @@ public:
 	{
 		return false;
 	}
-private:
-	SettingsInstance* settings;
+
+	bool requiresScreen()
+	{
+		return false;
+	}
+
+	bool requiresSettingsInstance()
+	{
+		return true;
+	}
 };

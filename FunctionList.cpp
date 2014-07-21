@@ -3,6 +3,16 @@
 
 int FunctionList::registerFunc(FunctionBase* func)
 {
+	if(func->requiresSettingsInstance() == true)
+	{
+		func->settings = FunctionList::setting;
+	}
+
+	if(func->requiresScreen() == true)
+	{
+		func->screen = FunctionList::screen;
+	}
+
 	func->setFuncIden(++funcidenbuffer);
 	Functions.push_back(func);
 	return Functions.back()->getFuncIden();
@@ -50,9 +60,11 @@ bool FunctionList::exists(std::string funcname)
 	return false;
 }
 
-FunctionList::FunctionList(void)
+FunctionList::FunctionList(Screen* scr, SettingsInstance* sets)
 {
 	FunctionList::funcidenbuffer = 0;
+	screen = scr;
+	setting = sets;
 }
 
 

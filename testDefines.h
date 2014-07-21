@@ -179,7 +179,7 @@ class divO : public OperatorBase
 
 class sqrtF : public FunctionBase
 {
-	
+
 	ExpressionType evaluate(Expression input)
 	{
 		if(input.length() == 1)
@@ -220,57 +220,5 @@ class sqrtF : public FunctionBase
 	{
 		iden = idenin;
 	}
-
-	bool isVariadic()
-	{
-		return false;
-	}
 };
 
-class variadictest : public FunctionBase
-{
-	
-	ExpressionType evaluate(Expression input)
-	{
-		if(input.length() == 1)
-		{
-			double ans = sqrt(input.at(0).getNumeric());
-			ExpressionType tempex(ans);
-			return tempex;
-		}
-	}
-
-	ExpressionType evaluate(std::vector<ExpressionType> input) 
-	{
-
-		double ans = sqrt(input[0].getNumeric());
-		ExpressionType tempex(ans);
-		return tempex;
-		
-	}
-
-	int getFuncIden() 
-	{
-		return iden;
-	}
-
-	std::string getFuncName() 
-	{
-		return "print";
-	}
-
-	int getFuncArgNum() 
-	{
-		return 1;
-	}
-
-	void setFuncIden(int idenin)
-	{
-		iden = idenin;
-	}
-
-	bool isVariadic()
-	{
-		return true;
-	}
-};

@@ -4,12 +4,13 @@
 
 #include "Expression.h"
 #include "ExpressionType.h"
-
-
+#include "Screen.h"
+#include "SettingsInstance.h"
 
 class Expression;
 class ExpressionType;
-
+class Screen;
+class SettingsInstance;
 
 //Any Function defining class must inherit from FunctionBase
 class FunctionBase
@@ -28,9 +29,17 @@ public:
 	virtual int getFuncArgNum() = 0;
 	//Returns weather or not the function is variadic
 	virtual bool isVariadic() = 0;
+	//Returns whether function requires a Screen type
+	virtual bool requiresScreen() = 0;
+	//Returns whether function requires a Settings type
+	virtual bool requiresSettingsInstance() = 0;
 	
 
 	virtual void setFuncIden(int idenin) = 0;
+
+
+	Screen* screen;
+	SettingsInstance* settings;
 
 	FunctionBase(void);
 	~FunctionBase(void);

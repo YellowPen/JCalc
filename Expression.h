@@ -13,8 +13,8 @@
 #include "Error.h"
 
 
-class SystemState;
 class ExpressionType;
+class SystemState;
 
 class Expression
 {

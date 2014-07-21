@@ -36,7 +36,7 @@ bool OperatorList::exists(std::string iden)
 {
 	for(unsigned int i = 0; i <  Operators.size(); i++)
 	{
-		if( Operators[i]->getOpName() == iden)
+		if( Operators.at(i)->getOpName() == iden)
 		{
 			return  true;
 		}

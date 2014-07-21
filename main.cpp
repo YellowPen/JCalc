@@ -11,6 +11,7 @@
 #include "Operators.h"
 #include "Functions.h"
 #include "SettingsInstance.h"
+#include "Screen.h"
 
 using namespace std;
 
@@ -20,39 +21,41 @@ void toAllLowerCase(string input)
 	boost::algorithm::to_lower(input);
 }
 
-void regFuncsOps(SystemState* sys)
-{
-	
-	plusO add;
-	minusO sub;
-	mulO mul;
-	divO div;
-	ExponO ex;
-	sqrtF sqr;
-	sinF sine(sys->Settings);
-
-	//Load internal functions
-	sys->Operators->registerOp(&add);
-	sys->Operators->registerOp(&sub);
-	sys->Operators->registerOp(&mul);
-	sys->Operators->registerOp(&div);
-	sys->Operators->registerOp(&ex);
-	sys->Functions->registerFunc(&sqr);
-	sys->Functions->registerFunc(&sine);
-}
 
 
 int main()
 {
 	SystemState sys_state;
 
-	FunctionList funcs;
+	
+	
+	Screen screen;
+	SettingsInstance settings(&screen);
+	FunctionList funcs(&screen, &settings);
 	OperatorList ops;
-	SettingsInstance settings;
 
 	sys_state.Functions = &funcs;
 	sys_state.Operators = &ops;
 	sys_state.Settings = &settings;
+	sys_state.ScreenOut = &screen;
+
+	plusO add;
+	minusO sub;
+	mulO mul;
+	divO div;
+	ExponO ex;
+	sqrtF sqr;
+	sinF sine;
+	modeF mode;
+
+	sys_state.Operators->registerOp(&add);
+	sys_state.Operators->registerOp(&sub);
+	sys_state.Operators->registerOp(&mul);
+	sys_state.Operators->registerOp(&div);
+	sys_state.Operators->registerOp(&ex);
+	sys_state.Functions->registerFunc(&sqr);
+	sys_state.Functions->registerFunc(&sine);
+	sys_state.Functions->registerFunc(&mode);
 
 	ExpressionEvaluator eval;
 
@@ -61,14 +64,14 @@ int main()
 	while(true)
 	{
 		string input;
-		cout<<"\n >>";
+		sys_state.ScreenOut->printCurPath();
 		getline(cin, input);
 		toAllLowerCase(input);
 
 		Expression inputex(input, &sys_state);
 		eval.setExpression(&inputex);
 
-		cout<<eval.evaluateToStr();
+		sys_state.ScreenOut->print(eval.evaluateToStr());
 	}
 
 	return 0;
